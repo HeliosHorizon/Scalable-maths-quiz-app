@@ -1,0 +1,328 @@
+body, html {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: Arial, sans-serif;
+    background-image:linear-gradient(rgba(13, 36, 119, 1),rgba(42, 61, 125, 1));
+    
+    width: 100vw;
+    height: 100vh;
+    
+    
+  
+    position: relative;
+    overflow: hidden;
+  }
+  
+  
+  
+  
+  
+  
+  
+  .grid-button-1 {
+    width: 75px;
+    height: 75px;
+    background-color: #fff;
+    color: rgb(3, 3, 3);
+    font-size: 2em;
+    font-weight: 600;
+    border: 2px solid;
+    border-radius: 30px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.8);
+  
+  }
+  .grid-button-1:hover{
+    transform: scale(0.9);
+  }
+  .grid-button-d {
+    width: 75px;
+    height: 75px;
+    background-color: #fff;
+    color: rgb(7, 7, 7);
+    font-size: 4em;
+  
+    border: 2px solid;
+    border-radius: 30px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.8);
+  
+  }
+  .grid-button-d:hover{
+    transform: scale(0.9);
+  }
+ 
+  
+ 
+  
+  
+  .button-grid-10 {
+    
+    display: grid;
+    margin: 0 auto;
+    
+    top: 50%;
+    left: 50%;
+    transform: translate(-210%,0%);
+    grid-template-columns: repeat(4, 1fr);
+    width:85px;
+    gap: 30px;
+    grid-column: 76px;
+    
+    margin-bottom: 50px;
+    
+    align-items: center;
+    padding-right: 0px;
+    place-items: center;
+  }
+  
+  
+  
+ 
+  .clear-button {
+    width: 75px;
+    height: 75px;
+    background: #007bff;
+    color: rgb(3, 3, 3);
+    font-size: 1.8em;
+    border: 2px solid;
+    border-radius: 30px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.8);
+  
+  }
+  
+  .clear-button:hover {
+    background-color: #ff1a1a;
+    transform: scale(0.9);
+    
+  }
+  
+  .clr{
+    height: 50px;
+    width: 50px;
+  }
+  
+  
+  
+  
+  
+  @media (max-width: 700px) {
+    .button-grid-10 {
+      grid-template-columns: repeat(4, 1fr);
+      transform: translate(-150%,0%);
+      gap: 20px;
+    }
+  
+    .grid-button-1, .grid-button-d {
+      font-size: 1rem;
+      padding: 10px;
+      width: 85px;
+      height: 85px;
+      
+      align-items: center;
+      justify-content: center;
+  
+    }
+    
+    .grid-button-1 {
+      width: 65px;
+      height: 65px;
+      background-color: #fff;
+      color: rgb(3, 3, 3);
+      font-size: 2em;
+      font-weight: 600;
+      border: 2px solid;
+      border-radius: 20px;
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.8);
+    
+    }
+    .grid-button-d {
+      width: 65px;
+      height: 65px;
+      background-color: #fff;
+      color: rgb(7, 7, 7);
+      font-size: 4em;
+    
+      border: 2px solid;
+      border-radius: 20px;
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.8);
+    
+    }
+    .clear-button{
+      width: 65px;
+      height: 65px;
+      
+      color: rgb(7, 7, 7);
+      font-size: 4em;
+    
+      border: 2px solid;
+      border-radius: 20px;
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.8);
+  
+    }
+  
+   
+  }
+  @media (max-height:770px) {
+    .button-grid-10 {
+      grid-template-columns: repeat(4, 1fr);
+      transform: translate(-150%,0%);
+      gap: 20px;
+    }
+  
+    .grid-button-1, .grid-button-d {
+      font-size: 1rem;
+      padding: 10px;
+      width: 85px;
+      height: 85px;
+      
+      align-items: center;
+      justify-content: center;
+  
+    }
+    
+    .grid-button-1 {
+      width: 65px;
+      height: 65px;
+      background-color: #fff;
+      color: rgb(3, 3, 3);
+      font-size: 2em;
+      font-weight: 600;
+      border: 2px solid;
+      border-radius: 20px;
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.8);
+    
+    }
+    .grid-button-d {
+      width: 65px;
+      height: 65px;
+      background-color: #fff;
+      color: rgb(7, 7, 7);
+      font-size: 4em;
+    
+      border: 2px solid;
+      border-radius: 20px;
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.8);
+    
+    }
+    .clear-button{
+      width: 65px;
+      height: 65px;
+      
+      color: rgb(7, 7, 7);
+      font-size: 4em;
+    
+      border: 2px solid;
+      border-radius: 20px;
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.8);
+  
+    }
+    
+  }
+  @media (max-height:715px) {
+    .button-grid-10 {
+      grid-template-columns: repeat(4, 1fr);
+      transform: translate(-100%,0%);
+      gap: 10px;
+    }
+  
+    .grid-button-1, .grid-button-d {
+      font-size: 1rem;
+      padding: 10px;
+      width: 85px;
+      height: 85px;
+      
+      align-items: center;
+      justify-content: center;
+  
+    }
+    
+    .grid-button-1 {
+      width: 55px;
+      height: 55px;
+      background-color: #fff;
+      color: rgb(3, 3, 3);
+      font-size: 2em;
+      font-weight: 600;
+      border: 2px solid;
+      border-radius: 20px;
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.8);
+    
+    }
+    .grid-button-d {
+      width: 55px;
+      height: 55px;
+      background-color: #fff;
+      color: rgb(7, 7, 7);
+      font-size: 4em;
+    
+      border: 2px solid;
+      border-radius: 20px;
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.8);
+    
+    }
+    .clear-button{
+      width: 55px;
+      height: 55px;
+      
+      color: rgb(7, 7, 7);
+      font-size: 4em;
+    
+      border: 2px solid;
+      border-radius: 20px;
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.8);
+  
+    }
+    
+  }
