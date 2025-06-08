@@ -11,21 +11,18 @@ import bell from './game_screen_bell_icons.png'
 import stars from './stargroup.png';
 
 
-function generateUniqueQuestion(existingQuestions) {
-  let question;
-  do {
-    const num1 = Math.floor(Math.random() * 20) + 1;
-    const num2 = 3;
-    const correctAnswer = num1 + num2;
-    
-    question = {
-      num1,
-      num2,
-      correctAnswer
-    };
-  } while (existingQuestions.some(q => q.num1 === question.num1 && q.num2 === question.num2));
+function getTwoDigitNumber() {
+  return Math.floor(Math.random() * 90) + 10; // Generates a random number between 10 and 99
+}
 
-  return question;
+function generateQuestion() {
+  const num1 = getTwoDigitNumber();
+  const num2 = getTwoDigitNumber();
+  return {
+    num1,
+    num2,
+    correctAnswer: num1 + num2 // Calculates the sum of two numbers
+  };
 }
 
 function Mathadd3() {
@@ -39,15 +36,11 @@ function Mathadd3() {
   const [popupMessage2, setPopupMessage2] = useState('');
   const [popupImage, setPopupImage] = useState(incorrectPopupImg); 
   const [answerSummary, setAnswerSummary] = useState([]);
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false); // New state for submission control
   const navigate = useNavigate();
 
   useEffect(() => {
-    const generatedQuestions = [];
-    while (generatedQuestions.length < 10) {
-      const newQuestion = generateUniqueQuestion(generatedQuestions);
-      generatedQuestions.push(newQuestion);
-    }
+    const generatedQuestions = Array.from({ length: 10 }, () => generateQuestion());
     setQuestions(generatedQuestions);
   }, []);
 
@@ -86,6 +79,7 @@ function Mathadd3() {
       }
     ]);
 
+    
     setPopupMessage(isCorrect ? 'Keep it up!' : 'Incorrect!');
     const icon = (
       <img 
@@ -101,7 +95,6 @@ function Mathadd3() {
         {isCorrect ? '+1' : '+0'}
       </span>
     );
-    
     setPopupImage(isCorrect ? correctPopupImg : incorrectPopupImg);
     setLastAnswerCorrect(isCorrect);
     setShowPopup(true);
@@ -110,6 +103,7 @@ function Mathadd3() {
   const handleClear = () => {
     setUserAnswer('');
   };
+
   const handleNextQuestion = () => {
     setIsSubmitting(false); // Reset the submit state here
     if (currentQuestionIndex + 1 < questions.length) {
@@ -146,9 +140,8 @@ function Mathadd3() {
       <p className="qu">Question {currentQuestionIndex + 1} of 10</p>
       <p className="p">{currentQuestion.num1} + {currentQuestion.num2} </p>
       <div className="answer-section">
-        <p className='equals'>=</p>
         <AnswerInput userAnswer={userAnswer} />
-        
+        <p className='equals'>=</p>
       </div>
       <div className='contain'>
         <button

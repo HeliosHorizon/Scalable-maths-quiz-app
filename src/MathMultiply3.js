@@ -10,20 +10,18 @@ import incorrectPopupImg from './wronganswerbox.png';
 import bell from './game_screen_bell_icons.png'
 import stars from './stargroup.png';
 
-function generateUniqueQuestion(existingQuestions) {
-  let num1, num2, question;
+function getTwoDigitNumber() {
+  return Math.floor(Math.random() * 90) + 10; // Generates a random number between 10 and 99
+}
 
-  do {
-    num1 = Math.floor(Math.random() * 10) + 1;
-    num2 = 3;
-    question = {
-      num1,
-      num2,
-      correctAnswer: num1 * num2,
-    };
-  } while (existingQuestions.some(q => q.num1 === question.num1 && q.num2 === question.num2));
-
-  return question;
+function generateQuestion() {
+  const num1 = getTwoDigitNumber();
+  const num2 = getTwoDigitNumber();
+  return {
+    num1,
+    num2,
+    correctAnswer: num1 * num2 // Calculates the product of two numbers
+  };
 }
 
 function MathMultiply3() {
@@ -37,17 +35,14 @@ function MathMultiply3() {
   const [popupMessage2, setPopupMessage2] = useState('');
   const [popupImage, setPopupImage] = useState(incorrectPopupImg); 
   const [answerSummary, setAnswerSummary] = useState([]);
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false); // New state for submission control
   const navigate = useNavigate();
 
   useEffect(() => {
-    const generatedQuestions = [];
-    while (generatedQuestions.length < 10) {
-      const newQuestion = generateUniqueQuestion(generatedQuestions);
-      generatedQuestions.push(newQuestion);
-    }
+    const generatedQuestions = Array.from({ length: 10 }, () => generateQuestion());
     setQuestions(generatedQuestions);
   }, []);
+
   const handleDigitClick = (digit) => {
     setUserAnswer(userAnswer + digit);
   };
@@ -76,7 +71,7 @@ function MathMultiply3() {
     setAnswerSummary(prevSummary => [
       ...prevSummary,
       {
-        question: `${questions[currentQuestionIndex].num1} * ${questions[currentQuestionIndex].num2} = `,
+        question: `${questions[currentQuestionIndex].num1} + ${questions[currentQuestionIndex].num2} = `,
         userAnswer: userAnswerFloat,
         correctAnswer,
         isCorrect,
@@ -115,7 +110,7 @@ function MathMultiply3() {
       setUserAnswer('');
     } else {
       // Navigate to the Summary page after the last question
-      navigate('/summary3', {
+      navigate('/summary', {
         state: {
           score,
           answerSummary
@@ -143,9 +138,8 @@ function MathMultiply3() {
       <p className="qu">Question {currentQuestionIndex + 1} of 10</p>
       <p className="p">{currentQuestion.num1} * {currentQuestion.num2} </p>
       <div className="answer-section">
-        <p className='equals'>=</p>
         <AnswerInput userAnswer={userAnswer} />
-        
+        <p className='equals'>=</p>
       </div>
       <div className='contain'>
         <button

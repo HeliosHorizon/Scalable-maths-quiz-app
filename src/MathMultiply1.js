@@ -7,23 +7,22 @@ import winSound from './achievementbell.wav';
 import failSound from './failiure.wav';
 import correctPopupImg from './correctanswerbox.png';
 import incorrectPopupImg from './wronganswerbox.png';
-import bell from './game_screen_bell_icons.png';
+import bell from './game_screen_bell_icons.png'
 import stars from './stargroup.png';
 
-function generateUniqueQuestion(existingQuestions) {
-  let num1, num2, question;
 
-  do {
-    num1 = Math.floor(Math.random() * 10) + 1;
-    num2 = 1;
-    question = {
-      num1,
-      num2,
-      correctAnswer: num1 * num2,
-    };
-  } while (existingQuestions.some(q => q.num1 === question.num1 && q.num2 === question.num2));
+function getOneDigitNumber() {
+  return Math.floor(Math.random() * 9) + 1; // Generates a random number between 1 and 9
+}
 
-  return question;
+function generateQuestion() {
+  const num1 = getOneDigitNumber();
+  const num2 = getOneDigitNumber();
+  return {
+    num1,
+    num2,
+    correctAnswer: num1 * num2 // Calculates the product of two numbers
+  };
 }
 
 function MathMultiply1() {
@@ -37,15 +36,11 @@ function MathMultiply1() {
   const [popupMessage2, setPopupMessage2] = useState('');
   const [popupImage, setPopupImage] = useState(incorrectPopupImg); 
   const [answerSummary, setAnswerSummary] = useState([]);
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false); // New state for submission control
   const navigate = useNavigate();
 
   useEffect(() => {
-    const generatedQuestions = [];
-    while (generatedQuestions.length < 10) {
-      const newQuestion = generateUniqueQuestion(generatedQuestions);
-      generatedQuestions.push(newQuestion);
-    }
+    const generatedQuestions = Array.from({ length: 10 }, () => generateQuestion());
     setQuestions(generatedQuestions);
   }, []);
 
@@ -77,7 +72,7 @@ function MathMultiply1() {
     setAnswerSummary(prevSummary => [
       ...prevSummary,
       {
-        question: `${questions[currentQuestionIndex].num1} * ${questions[currentQuestionIndex].num2} = `,
+        question: `${questions[currentQuestionIndex].num1} + ${questions[currentQuestionIndex].num2} = `,
         userAnswer: userAnswerFloat,
         correctAnswer,
         isCorrect,
@@ -89,7 +84,7 @@ function MathMultiply1() {
       <img 
         src={stars} 
         alt='img'
-        style={{ width: '30px', height: '30px', marginTop: '10px', marginRight: '10px' }} 
+        style={{ width: '30px', height: '30px',marginTop: '10px', marginRight: '10px' }} 
       />
     );
   
@@ -99,7 +94,6 @@ function MathMultiply1() {
         {isCorrect ? '+1' : '+0'}
       </span>
     );
-    
     setPopupImage(isCorrect ? correctPopupImg : incorrectPopupImg);
     setLastAnswerCorrect(isCorrect);
     setShowPopup(true);
@@ -108,7 +102,7 @@ function MathMultiply1() {
   const handleClear = () => {
     setUserAnswer('');
   };
-  
+
   const handleNextQuestion = () => {
     setIsSubmitting(false); // Reset the submit state here
     if (currentQuestionIndex + 1 < questions.length) {
@@ -117,7 +111,7 @@ function MathMultiply1() {
       setUserAnswer('');
     } else {
       // Navigate to the Summary page after the last question
-      navigate('/summary3', {
+      navigate('/summary', {
         state: {
           score,
           answerSummary
@@ -145,15 +139,14 @@ function MathMultiply1() {
       <p className="qu">Question {currentQuestionIndex + 1} of 10</p>
       <p className="p">{currentQuestion.num1} * {currentQuestion.num2} </p>
       <div className="answer-section">
-        <p className='equals'>=</p>
         <AnswerInput userAnswer={userAnswer} />
-        
+        <p className='equals'>=</p>
       </div>
       <div className='contain'>
         <button
           className="submit-button"
           onClick={handleSubmit}
-          disabled={isSubmitting}
+          disabled={isSubmitting} // Disable the button if it's submitting
         >
           Check Answer
         </button>

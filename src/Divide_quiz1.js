@@ -7,27 +7,22 @@ import winSound from './achievementbell.wav';
 import failSound from './failiure.wav';
 import correctPopupImg from './correctanswerbox.png';
 import incorrectPopupImg from './wronganswerbox.png';
-import bell from './game_screen_bell_icons.png';
+import bell from './game_screen_bell_icons.png'
 import stars from './stargroup.png';
 
-function generateUniqueQuestion(existingQuestions) {
-  let num1, num2, correctAnswer;
-  let question;
 
-  do {
-    num2 = 1
-    num1 = num2 * (Math.floor(Math.random() * 15) + 1); // num1 is a multiple of num2
+function getOneDigitNumber() {
+  return Math.floor(Math.random() * 9) + 1; // Generates a random number between 1 and 9
+}
 
-    correctAnswer = num1 / num2; // This will always be a whole number
-
-    question = {
-      num1,
-      num2,
-      correctAnswer
-    };
-  } while (existingQuestions.some(q => q.num1 === question.num1 && q.num2 === question.num2));
-
-  return question;
+function generateQuestion() {
+  const num1 = getOneDigitNumber();
+  const num2 = getOneDigitNumber();
+  return {
+    num1,
+    num2,
+    correctAnswer: parseFloat((num1 / num2).toFixed(2)) // Rounds to 2 decimal places
+  };
 }
 
 function DivideQuiz1() {
@@ -35,21 +30,17 @@ function DivideQuiz1() {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [score, setScore] = useState(0);
   const [userAnswer, setUserAnswer] = useState('');
-  const [lastAnswerCorrect, setLastAnswerCorrect] = useState('undefined');
+  const [lastAnswerCorrect, setLastAnswerCorrect] = useState(null);
   const [showPopup, setShowPopup] = useState(false);
   const [popupMessage, setPopupMessage] = useState('');
   const [popupMessage2, setPopupMessage2] = useState('');
-  const [popupImage, setPopupImage] = useState(incorrectPopupImg);
+  const [popupImage, setPopupImage] = useState(incorrectPopupImg); 
   const [answerSummary, setAnswerSummary] = useState([]);
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false); // New state for submission control
   const navigate = useNavigate();
 
   useEffect(() => {
-    const generatedQuestions = [];
-    while (generatedQuestions.length < 10) {
-      const newQuestion = generateUniqueQuestion(generatedQuestions);
-      generatedQuestions.push(newQuestion);
-    }
+    const generatedQuestions = Array.from({ length: 10 }, () => generateQuestion());
     setQuestions(generatedQuestions);
   }, []);
 
@@ -68,7 +59,7 @@ function DivideQuiz1() {
     setIsSubmitting(true);
 
     const userAnswerFloat = parseFloat(userAnswer);
-    const correctAnswer = questions[currentQuestionIndex].correctAnswer;
+    const correctAnswer = parseFloat(questions[currentQuestionIndex].correctAnswer.toFixed(2));
     const isCorrect = userAnswerFloat === correctAnswer;
 
     if (isCorrect) {
@@ -81,7 +72,7 @@ function DivideQuiz1() {
     setAnswerSummary(prevSummary => [
       ...prevSummary,
       {
-        question: `${questions[currentQuestionIndex].num1} / ${questions[currentQuestionIndex].num2} = `,
+        question: `${questions[currentQuestionIndex].num1} + ${questions[currentQuestionIndex].num2} = ?`,
         userAnswer: userAnswerFloat,
         correctAnswer,
         isCorrect,
@@ -93,7 +84,7 @@ function DivideQuiz1() {
       <img 
         src={stars} 
         alt='img'
-        style={{ width: '30px', height: '30px', marginTop: '10px', marginRight: '10px' }} 
+        style={{ width: '30px', height: '30px',marginTop: '10px', marginRight: '10px' }} 
       />
     );
   
@@ -120,7 +111,7 @@ function DivideQuiz1() {
       setUserAnswer('');
     } else {
       // Navigate to the Summary page after the last question
-      navigate('/summary2', {
+      navigate('/summary', {
         state: {
           score,
           answerSummary
@@ -148,15 +139,14 @@ function DivideQuiz1() {
       <p className="qu">Question {currentQuestionIndex + 1} of 10</p>
       <p className="p">{currentQuestion.num1} / {currentQuestion.num2} </p>
       <div className="answer-section">
-        <p className='equals'>=</p>
         <AnswerInput userAnswer={userAnswer} />
-        
+        <p className='equals'>=</p>
       </div>
       <div className='contain'>
         <button
           className="submit-button"
           onClick={handleSubmit}
-          disabled={isSubmitting}
+          disabled={isSubmitting} // Disable the button if it's submitting
         >
           Check Answer
         </button>

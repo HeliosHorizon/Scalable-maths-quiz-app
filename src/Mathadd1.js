@@ -10,21 +10,18 @@ import incorrectPopupImg from './wronganswerbox.png';
 import bell from './game_screen_bell_icons.png';
 import stars from './stargroup.png';
 
-function generateUniqueQuestion(existingQuestions) {
-  let question;
-  do {
-    const num1 = Math.floor(Math.random() * 20) + 1;
-    const num2 = 1;
-    const correctAnswer = num1 + num2;
-    
-    question = {
-      num1,
-      num2,
-      correctAnswer
-    };
-  } while (existingQuestions.some(q => q.num1 === question.num1 && q.num2 === question.num2));
+function getOneDigitNumber() {
+  return Math.floor(Math.random() * 9) + 1; 
+}
 
-  return question;
+function generateQuestion() {
+  const num1 = getOneDigitNumber();
+  const num2 = getOneDigitNumber();
+  return {
+    num1,
+    num2,
+    correctAnswer: num1 + num2 
+  };
 }
 
 function Mathadd1() {
@@ -38,22 +35,16 @@ function Mathadd1() {
   const [popupMessage2, setPopupMessage2] = useState('');
   const [popupImage, setPopupImage] = useState(incorrectPopupImg); 
   const [answerSummary, setAnswerSummary] = useState([]);
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false); // New state for submission control
   const navigate = useNavigate();
 
   useEffect(() => {
-    const generatedQuestions = [];
-    while (generatedQuestions.length < 10) {
-      const newQuestion = generateUniqueQuestion(generatedQuestions);
-      generatedQuestions.push(newQuestion);
-    }
+    const generatedQuestions = Array.from({ length: 10 }, () => generateQuestion());
     setQuestions(generatedQuestions);
   }, []);
 
   const handleDigitClick = (digit) => {
-    if (userAnswer.length < 5) {
-      setUserAnswer(userAnswer + digit);
-    }
+    setUserAnswer(userAnswer + digit);
   };
 
   const handleDecimalClick = () => {
@@ -147,9 +138,8 @@ function Mathadd1() {
       <p className="qu">Question {currentQuestionIndex + 1} of 10</p>
       <p className="p">{currentQuestion.num1} + {currentQuestion.num2} </p>
       <div className="answer-section">
-        <p className='equals'>=</p>
         <AnswerInput userAnswer={userAnswer} />
-        
+        <p className='equals'>=</p>
       </div>
       <div className='contain'>
         <button

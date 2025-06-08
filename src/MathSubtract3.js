@@ -7,21 +7,22 @@ import winSound from './achievementbell.wav';
 import failSound from './failiure.wav';
 import correctPopupImg from './correctanswerbox.png';
 import incorrectPopupImg from './wronganswerbox.png';
-import bell from './game_screen_bell_icons.png';
+import bell from './game_screen_bell_icons.png'
 import stars from './stargroup.png';
 
-function generateQuestion(usedQuestions) {
-  let num1;
 
-  // Ensure that the result is non-negative and num1 is greater than or equal to num2
-  do {
-    num1 = Math.floor(Math.random() * 20) + 3; // Start from 3 to ensure num1 >= num2
-  } while (usedQuestions.has(`${num1}-3`)); // Avoid repeating questions
+function getTwoDigitNumber() {
+  return Math.floor(Math.random() * 90) + 10; // Generates a random number between 10 and 99
+}
 
+function generateQuestion() {
+  let num1 = getTwoDigitNumber();
+  let num2 = getTwoDigitNumber();
+  if (num1 < num2) [num1, num2] = [num2, num1]; // Ensure num1 >= num2
   return {
     num1,
-    num2: 3,
-    correctAnswer: num1 - 3 
+    num2,
+    correctAnswer: num1 - num2 // Calculates the difference of two numbers
   };
 }
 
@@ -34,18 +35,13 @@ function MathSubtract3() {
   const [showPopup, setShowPopup] = useState(false);
   const [popupMessage, setPopupMessage] = useState('');
   const [popupMessage2, setPopupMessage2] = useState('');
-  const [popupImage, setPopupImage] = useState(incorrectPopupImg);
+  const [popupImage, setPopupImage] = useState(incorrectPopupImg); 
   const [answerSummary, setAnswerSummary] = useState([]);
   const [isSubmitting, setIsSubmitting] = useState(false); // New state for submission control
   const navigate = useNavigate();
 
   useEffect(() => {
-    const usedQuestions = new Set(); // Track used questions to prevent duplicates
-    const generatedQuestions = Array.from({ length: 10 }, () => {
-      const question = generateQuestion(usedQuestions);
-      usedQuestions.add(`${question.num1}-3`);
-      return question;
-    });
+    const generatedQuestions = Array.from({ length: 10 }, () => generateQuestion());
     setQuestions(generatedQuestions);
   }, []);
 
@@ -74,10 +70,10 @@ function MathSubtract3() {
       playSound(failSound);
     }
 
-    setAnswerSummary((prevSummary) => [
+    setAnswerSummary(prevSummary => [
       ...prevSummary,
       {
-        question: `${questions[currentQuestionIndex].num1} - 3 = `,
+        question: `${questions[currentQuestionIndex].num1} + ${questions[currentQuestionIndex].num2} = `,
         userAnswer: userAnswerFloat,
         correctAnswer,
         isCorrect,
@@ -88,11 +84,11 @@ function MathSubtract3() {
     const icon = (
       <img 
         src={stars} 
-        alt="img"
-        style={{ width: '30px', height: '30px', marginTop: '10px', marginRight: '10px' }} 
+        alt='img'
+        style={{ width: '30px', height: '30px',marginTop: '10px', marginRight: '10px' }} 
       />
     );
-
+  
     setPopupMessage2(
       <span>
         {icon}
@@ -116,7 +112,7 @@ function MathSubtract3() {
       setUserAnswer('');
     } else {
       // Navigate to the Summary page after the last question
-      navigate('/summary1', {
+      navigate('/summary', {
         state: {
           score,
           answerSummary
@@ -139,15 +135,15 @@ function MathSubtract3() {
   return (
     <div className="container2">
       <img src={bell} alt="Popup" className="quiz-image1" />
-      <button className="back-link1" onClick={() => navigate('/Subtract')}>&lt;</button>
-
+      <button className="back-link1" onClick={() => navigate('/Subtract')}>&lt;</button>   
+          
       <p className="qu">Question {currentQuestionIndex + 1} of 10</p>
-      <p className="p">{currentQuestion.num1} - 3 </p>
+      <p className="p">{currentQuestion.num1} - {currentQuestion.num2} </p>
       <div className="answer-section">
-        <p className='equals'>=</p>
         <AnswerInput userAnswer={userAnswer} />
+        <p className='equals'>=</p>
       </div>
-      <div className="contain">
+      <div className='contain'>
         <button
           className="submit-button"
           onClick={handleSubmit}
@@ -156,14 +152,15 @@ function MathSubtract3() {
           Check Answer
         </button>
         <DigitGrid handleDigitClick={handleDigitClick} handleDecimalClick={handleDecimalClick} handleClear={handleClear} />
+        
       </div>
-
+      
       {showPopup && (
         <div className="popup">
           <img src={popupImage} alt="Popup" className="popup-image" />
           <p className="popup-message">{popupMessage}</p>
           <p className="popup-message2">{popupMessage2}</p>
-
+          
           <button className="next-button" onClick={handleNextQuestion}>Next Question</button>
         </div>
       )}

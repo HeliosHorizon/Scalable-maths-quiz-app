@@ -11,28 +11,18 @@ import bell from './game_screen_bell_icons.png';
 import stars from './stargroup.png';
 
 
+function getTwoDigitNumber() {
+  return Math.floor(Math.random() * 90) + 10; // Generates a random number between 10 and 99
+}
 
-
-
-
-function generateUniqueQuestion(existingQuestions) {
-  let num1, num2, correctAnswer;
-  let question;
-
-  do {
-    num2 = 3
-    num1 = num2 * (Math.floor(Math.random() * 15) + 1); // num1 is a multiple of num2
-
-    correctAnswer = num1 / num2; // This will always be a whole number
-
-    question = {
-      num1,
-      num2,
-      correctAnswer
-    };
-  } while (existingQuestions.some(q => q.num1 === question.num1 && q.num2 === question.num2));
-
-  return question;
+function generateQuestion() {
+  const num1 = getTwoDigitNumber();
+  const num2 = getTwoDigitNumber();
+  return {
+    num1,
+    num2,
+    correctAnswer: parseFloat((num1 / num2).toFixed(2)) // Rounds to 2 decimal places
+  };
 }
 
 function DivideQuiz3() {
@@ -40,21 +30,17 @@ function DivideQuiz3() {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [score, setScore] = useState(0);
   const [userAnswer, setUserAnswer] = useState('');
-  const [lastAnswerCorrect, setLastAnswerCorrect] = useState('undefined');
+  const [lastAnswerCorrect, setLastAnswerCorrect] = useState(null);
   const [showPopup, setShowPopup] = useState(false);
   const [popupMessage, setPopupMessage] = useState('');
   const [popupMessage2, setPopupMessage2] = useState('');
-  const [popupImage, setPopupImage] = useState(incorrectPopupImg);
+  const [popupImage, setPopupImage] = useState(incorrectPopupImg); 
   const [answerSummary, setAnswerSummary] = useState([]);
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false); // New state for submission control
   const navigate = useNavigate();
 
   useEffect(() => {
-    const generatedQuestions = [];
-    while (generatedQuestions.length < 10) {
-      const newQuestion = generateUniqueQuestion(generatedQuestions);
-      generatedQuestions.push(newQuestion);
-    }
+    const generatedQuestions = Array.from({ length: 10 }, () => generateQuestion());
     setQuestions(generatedQuestions);
   }, []);
 
@@ -86,7 +72,7 @@ function DivideQuiz3() {
     setAnswerSummary(prevSummary => [
       ...prevSummary,
       {
-        question: `${questions[currentQuestionIndex].num1} / ${questions[currentQuestionIndex].num2} =`,
+        question: `${questions[currentQuestionIndex].num1} + ${questions[currentQuestionIndex].num2} = ?`,
         userAnswer: userAnswerFloat,
         correctAnswer,
         isCorrect,
@@ -125,7 +111,7 @@ function DivideQuiz3() {
       setUserAnswer('');
     } else {
       // Navigate to the Summary page after the last question
-      navigate('/summary2', {
+      navigate('/summary', {
         state: {
           score,
           answerSummary
@@ -153,9 +139,8 @@ function DivideQuiz3() {
       <p className="qu">Question {currentQuestionIndex + 1} of 10</p>
       <p className="p">{currentQuestion.num1} / {currentQuestion.num2} </p>
       <div className="answer-section">
-        <p className='equals'>=</p>
         <AnswerInput userAnswer={userAnswer} />
-        
+        <p className='equals'>=</p>
       </div>
       <div className='contain'>
         <button
